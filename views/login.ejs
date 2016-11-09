@@ -1,0 +1,26 @@
+<% include partials/header %>
+
+
+<div class="container">
+  <div class="text-center">
+    
+  </div>
+  <div class="message-form">
+      <h1>Log in</h1>
+  </div>
+  <div class="add-form">
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <input type="text" class="form-control" name="username" placeholder="Your username">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-default btn-search btn-block">Log in!</button>
+    </form>
+    
+    <div><a href="/campgrounds">Back</a> </div>
+  </div>
+</div>
+
+<% include partials/footer %>
