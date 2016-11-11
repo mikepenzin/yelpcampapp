@@ -54,7 +54,7 @@
 				<% campground.comments.forEach(function(comment){ %>
                 	<div class="row comments">
                 		<div calss="col-md-12">
-                			<strong><%= comment.author.username %></strong> - <small><%= comment.created.toDateString() %></small>
+                			<strong><%= comment.author.username %></strong>
                 			<span class="pull-right">
                 			<% if(currentUser && comment.author.id.equals(currentUser._id)){ %>	
 			                    <div class="delete-form-comments">
@@ -63,7 +63,7 @@
 						                <button class="btn btn-default btn-xs btn-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
 						            </form>
 			                    </div>
-			                <% } %> 10 days ago</span>
+			                <% } %><small><%= comment.created.toDateString() %></small></span>
                 			<p>
                 			<span><%= comment.text %></span>
 		                    </p> 
