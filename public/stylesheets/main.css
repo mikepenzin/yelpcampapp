@@ -94,8 +94,6 @@ a:active {
 	font-family: 'Raleway';
 	position: relative;
     overflow: hidden;
-    /*height: 100vh;*/
-    /*padding-top: 30vh;*/
     z-index:0;
 }
 
@@ -146,16 +144,7 @@ a:active {
 	background: linear-gradient(
       rgba(0, 0, 0, 0.4), 
       rgba(0, 0, 0, 0.4)
-    ),url("https://static.pexels.com/photos/14287/pexels-photo-14287.jpeg");
-	background-size: cover;
-	background-position: center;
-}
-
-.jumbo-bg-inner {
-	background: linear-gradient(
-      rgba(0, 0, 0, 0.4), 
-      rgba(0, 0, 0, 0.4)
-    ),url("https://images.unsplash.com/photo-1465508372103-60fc5e6df917?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&s=be95fd43bc7f4bb4cc219cbf40cb417e");
+    ),url("../assets/img/bg.jpg");
 	background-size: cover;
 	background-position: center;
 }
