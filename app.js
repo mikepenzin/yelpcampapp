@@ -9,10 +9,10 @@ var express                 = require("express"),
     Campground              = require('./models/campground'),
     Comment                 = require('./models/comment'),
     User                    = require('./models/user'),
-    seedDB                  = require('./seeds'),
+    compression             = require('compression'),
     app                     = express();
 
-// seedDB();
+
 
 //requring routes
 var commentRoutes    = require("./routes/comments"),
@@ -73,6 +73,19 @@ app.use("/campgrounds/:id/comments", commentRoutes);
 // app.get("*", function(req, res){
 //     res.send("Not what we expected :(");
 // });
+
+app.use(compression({filter: shouldCompress}));
+
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false;
+  }
+
+  // fallback to standard filter function
+  return compression.filter(req, res);
+}
+
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("=========================");
