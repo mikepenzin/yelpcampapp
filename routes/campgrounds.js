@@ -1,8 +1,20 @@
 var express = require("express");
+var multer = require('multer');
 var router = express.Router();
 var Campground = require('../models/campground');
 var Comment = require('../models/comment');
 var middleware = require('../middleware');
+
+
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './public/uploads');
+  },
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var upload = multer({ storage : storage}).single('image');
 
 
 // INDEX route - show all data
@@ -19,25 +31,55 @@ router.get("/", function(req, res){
 
 // CREATE route - add new item to the db
 router.post("/", middleware.isLoggedIn, function(req, res){
-    var name = req.body.name;
-    var image = req.body.image;
-    var descr = req.body.descr;
-    var author = {
-      id: req.user._id,
-      username: req.user.username
-    };
-    var newCamp = {name: name, image: image, descr: descr, author: author};
-    console.log(req.user);
-    Campground.create(newCamp, function(err, campground){
-        if(err){
-          console.log(err);
-        } else {
-          console.log("Newly created campground:");
-          console.log(campground);
-          res.redirect("/campgrounds");
+     upload(req,res,function(err) {
+        if(err) {
+            return res.end("Error uploading file.");
         }
-    });
+        //get data from form and add to campgrounds array
+        var name = req.body.name;
+        var image = '/uploads/' + req.file.filename;
+        var descr = req.body.descr;
+        var author = {
+            id: req.user._id,
+            username: req.user.username
+        };
+        var newCampground = {name: name, image: image, descr: descr, author: author};
+        //Create a new campground and save to DB
+        Campground.create(newCampground, function(err, newlyCreated){
+            if(err){
+                console.log(err);
+            } else{
+                //redirect back to campgrounds page
+                res.redirect("/campgrounds");       
+            }
+        });
+     });
 });
+
+//     upload(req,res,function(err) {
+//         if(err) {
+//             return res.end("Error uploading file."); 
+//         }
+//     //get data from form and add to campgrounds array
+//     var name = req.body.name;
+//     var image = '/uploads/' + req.file.filename;
+//     var desc = req.body.description;
+//     var author = {
+//         id: req.user._id,
+//         username: req.user.username
+//     }
+//     var newCamp = {name: name, image: image, descr: descr, author: author};
+//     console.log(req.user);
+//     Campground.create(newCamp, function(err, campground){
+//         if(err){
+//           console.log(err);
+//         } else {
+//           console.log("Newly created campground:");
+//           console.log(campground);
+//           res.redirect("/campgrounds");
+//         }
+//     });
+// });
 
 //NEW - show form to add new item to the db
 router.get("/new", middleware.isLoggedIn, function(req, res){
