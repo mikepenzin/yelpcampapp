@@ -1,28 +1,32 @@
-var express                 = require("express"),
-    bodyParser              = require("body-parser"),
+var bodyParser              = require("body-parser"),
     mongoose                = require('mongoose'),
     methodOverride          = require('method-override'),
     passport                = require("passport"),
     LocalStrategy           = require("passport-local"),
     passportLocalMongoose   = require("passport-local-mongoose"),
     flash                   = require("connect-flash"),
-    Campground              = require('./models/campground'),
-    Comment                 = require('./models/comment'),
     User                    = require('./models/user'),
     compression             = require('compression'),
+    express                 = require("express"),
     app                     = express();
 
 
+
+
+app.use(compression(9));
 
 //requring routes
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index");
 
+// console.log(process.env.DATABASEURL);
+// If process.env.DATABASEURL = undefined - need to perform:
+// export DATABASEURL=mongodb://localhost/yelp_camp
 
 mongoose.connect(process.env.DATABASEURL);
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public", { maxAge: 86400000 }));
 // to not use .ejs ending
 app.set("view engine","ejs");
 
@@ -69,22 +73,9 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-
 // app.get("*", function(req, res){
 //     res.send("Not what we expected :(");
 // });
-
-app.use(compression({filter: shouldCompress}));
-
-function shouldCompress (req, res) {
-  if (req.headers['x-no-compression']) {
-    // don't compress responses with this request header
-    return false;
-  }
-
-  // fallback to standard filter function
-  return compression.filter(req, res);
-}
 
 
 app.listen(process.env.PORT, process.env.IP, function(){
