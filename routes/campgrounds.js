@@ -33,7 +33,7 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, function(req, res){
      upload(req,res,function(err) {
         if(err) {
-            return res.end("Error uploading file.");
+            return res.end("Error uploading file." + err);
         }
         //get data from form and add to campgrounds array
         var name = req.body.name;
